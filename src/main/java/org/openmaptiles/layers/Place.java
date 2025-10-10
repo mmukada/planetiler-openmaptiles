@@ -112,10 +112,11 @@ public class Place implements
   private static final double MAX_CITY_POPULATION = 100_000_000d;
   private static final Set<String> MAJOR_CITY_PLACES = Set.of("city", "town", "village");
   private static final ZoomFunction<Number> LABEL_GRID_LIMITS = ZoomFunction.fromMaxZoomThresholds(Map.of(
-    8, 4,
-    9, 8,
-    10, 12,
-    12, 14
+    6, 6,
+    8, 10,
+    9, 12,
+    10, 14,
+    12, 16
   ), 0);
   private final Translations translations;
   private final Stats stats;
@@ -345,7 +346,7 @@ public class Place implements
     PlaceType placeType = PlaceType.forName(element.place());
 
     int minzoom = rank != null && rank == 1 ? 2 :
-      rank != null && rank <= 8 ? Math.max(3, rank - 1) :
+      rank != null && rank <= 8 ? Math.max(3, rank - 2) :
       placeType.ordinal() <= PlaceType.TOWN.ordinal() ? 7 :
       placeType.ordinal() <= PlaceType.VILLAGE.ordinal() ? 8 :
       placeType.ordinal() <= PlaceType.SUBURB.ordinal() ? 11 : 14;

@@ -494,7 +494,7 @@ class PlaceTest extends AbstractLayerTest {
       "capital", 6,
 
       "_type", "point",
-      "_minzoom", 6
+      "_minzoom", 5
     )), process(pointFeature(
       Map.of(
         "place", "city",
@@ -556,7 +556,7 @@ class PlaceTest extends AbstractLayerTest {
       "class", "city",
       "rank", "<null>",
       "_minzoom", 7,
-      "_labelgrid_limit", 4,
+      "_labelgrid_limit", 10,
       "_labelgrid_size", 128d
     )), process(pointFeature(
       Map.of(
@@ -579,7 +579,7 @@ class PlaceTest extends AbstractLayerTest {
       "_layer", "place",
       "class", "isolated_dwelling",
       "rank", "<null>",
-      "_labelgrid_limit", 14,
+      "_labelgrid_limit", 16,
       "_labelgrid_size", 128d,
       "_minzoom", 14
     )), process(pointFeature(
