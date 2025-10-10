@@ -114,43 +114,14 @@ public class MountainPeak implements
 
   @Override
   public void process(Tables.OsmPeakPoint element, FeatureCollector features) {
-    Double meters = Parse.meters(element.ele());
-    if (meters != null && Math.abs(meters) < 10_000) {
-      var feature = features.point(LAYER_NAME)
-        .setAttr(Fields.CLASS, element.source().getTag("natural"))
-        .putAttrs(OmtLanguageUtils.getNames(element.source().tags(), translations))
-        .putAttrs(elevationTags(meters))
-        .setSortKeyDescending(
-          meters.intValue() +
-            (nullIfEmpty(element.wikipedia()) != null ? 10_000 : 0) +
-            (nullIfEmpty(element.name()) != null ? 10_000 : 0)
-        )
-        .setMinZoom(7)
-        // need to use a larger buffer size to allow enough points through to not cut off
-        // any label grid squares which could lead to inconsistent label ranks for a feature
-        // in adjacent tiles. postProcess() will remove anything outside the desired buffer.
-        .setBufferPixels(100)
-        .setPointLabelGridSizeAndLimit(13, 100, 5);
-
-      if (peakInAreaUsingFeet(element)) {
-        feature.setAttr(Fields.CUSTOMARY_FT, 1);
-      }
-    }
+    // Exclude mountain peak point features entirely
+    return;
   }
 
   @Override
   public void process(Tables.OsmMountainLinestring element, FeatureCollector features) {
-    // TODO rank is approximate to sort important/named ridges before others, should switch to labelgrid for linestrings later
-    int rank = 3 -
-      (nullIfEmpty(element.wikipedia()) != null ? 1 : 0) -
-      (nullIfEmpty(element.name()) != null ? 1 : 0);
-    features.line(LAYER_NAME)
-      .setAttr(Fields.CLASS, element.source().getTag("natural"))
-      .setAttr(Fields.RANK, rank)
-      .putAttrs(OmtLanguageUtils.getNames(element.source().tags(), translations))
-      .setSortKey(rank)
-      .setMinZoom(13)
-      .setBufferPixels(100);
+    // Exclude mountain peak/ridge line features entirely
+    return;
   }
 
   /** Returns true if {@code element} is a point in an area where feet are used insead of meters (the US). */

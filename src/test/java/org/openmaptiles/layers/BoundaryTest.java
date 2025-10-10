@@ -328,25 +328,20 @@ class BoundaryTest extends AbstractLayerTest {
     relation1.setTag("admin_level", "10");
     relation1.setTag("boundary", "administrative");
 
-    assertFeatures(14, List.of(Map.of(
-      "maritime", 1
-    )), process(lineFeatureWithRelation(
+    // Maritime boundaries are excluded entirely
+    assertFeatures(14, List.of(), process(lineFeatureWithRelation(
       profile.preprocessOsmRelation(relation1),
       Map.of(
         "maritime", "yes"
       ))
     ));
-    assertFeatures(14, List.of(Map.of(
-      "maritime", 1
-    )), process(lineFeatureWithRelation(
+    assertFeatures(14, List.of(), process(lineFeatureWithRelation(
       profile.preprocessOsmRelation(relation1),
       Map.of(
         "natural", "coastline"
       ))
     ));
-    assertFeatures(14, List.of(Map.of(
-      "maritime", 1
-    )), process(lineFeatureWithRelation(
+    assertFeatures(14, List.of(), process(lineFeatureWithRelation(
       profile.preprocessOsmRelation(relation1),
       Map.of(
         "boundary_type", "maritime"
@@ -786,7 +781,8 @@ class BoundaryTest extends AbstractLayerTest {
     assertFeatures(14, List.of(Map.of("_minzoom", 0)),
       processOsmOnly(lineFeatureWithRelation(profile.preprocessOsmRelation(relation), Map.of())));
 
-    assertFeatures(14, List.of(Map.of("_minzoom", 4)),
+    // Maritime boundaries are excluded when using OSM-only boundaries as well
+    assertFeatures(14, List.of(),
       processOsmOnly(lineFeatureWithRelation(profile.preprocessOsmRelation(relation), Map.of("maritime", 1))));
 
     relation.setTag("admin_level", "4");

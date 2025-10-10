@@ -328,16 +328,8 @@ public class TransportationName implements
 
   @Override
   public void process(Tables.OsmShipwayLinestring element, FeatureCollector features) {
-    if (!nullOrEmpty(element.name())) {
-      features.line(LAYER_NAME)
-        .setBufferPixels(BUFFER_SIZE)
-        .setBufferPixelOverrides(MIN_LENGTH)
-        .putAttrs(OmtLanguageUtils.getNames(element.source().tags(), translations))
-        .setAttr(Fields.CLASS, element.shipway())
-        .setMinPixelSize(0)
-        .setSortKey(element.zOrder())
-        .setMinZoom(12);
-    }
+    // Exclude shipway names for sea features by not emitting them
+    return;
   }
 
   @Override

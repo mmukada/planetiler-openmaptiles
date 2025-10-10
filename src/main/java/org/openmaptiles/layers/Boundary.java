@@ -286,6 +286,10 @@ public class Boundary implements
         if (onlyOsmBoundaries && minAdminLevel <= 4) {
           minzoom = minAdminLevel == 2 ? (maritime ? 4 : 0) : 1;
         }
+        // Exclude maritime boundaries entirely
+        if (maritime) {
+          return;
+        }
         if (addCountryNames && !regionIds.isEmpty()) {
           // save for later
           try {

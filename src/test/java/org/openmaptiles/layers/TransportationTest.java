@@ -1893,23 +1893,8 @@ class TransportationTest extends AbstractLayerTest {
 
   @Test
   void testFerry() {
-    assertFeatures(10, List.of(Map.of(
-      "_layer", "transportation",
-      "class", "ferry",
-
-      "_minzoom", 4,
-      "_maxzoom", 14,
-      "_minpixelsize", 32d,
-      "_type", "line"
-    ), Map.of(
-      "_layer", "transportation_name",
-      "class", "ferry",
-      "name", "Boston - Provincetown Ferry",
-
-      "_minzoom", 12,
-      "_maxzoom", 14,
-      "_type", "line"
-    )), process(lineFeature(Map.of(
+    // Sea shipways (e.g., ferry routes) are excluded
+    assertFeatures(10, List.of(), process(lineFeature(Map.of(
       "route", "ferry",
       "name", "Boston - Provincetown Ferry",
       "motor_vehicle", "no",

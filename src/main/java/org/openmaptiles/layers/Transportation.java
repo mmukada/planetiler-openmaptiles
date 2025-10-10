@@ -635,17 +635,8 @@ public class Transportation implements
 
   @Override
   public void process(Tables.OsmShipwayLinestring element, FeatureCollector features) {
-    features.line(LAYER_NAME).setBufferPixels(BUFFER_SIZE)
-      .setAttr(Fields.CLASS, element.shipway()) // "ferry"
-      // no subclass
-      .setAttr(Fields.SERVICE, service(element.service()))
-      .setAttr(Fields.RAMP, element.isRamp() ? 1L : null)
-      .setAttr(Fields.BRUNNEL, brunnel(element.isBridge(), element.isTunnel(), element.isFord()))
-      .setAttr(Fields.LAYER, nullIfLong(element.layer(), 0))
-      .setSortKey(element.zOrder())
-      .setMinPixelSize(0) // merge during post-processing, then limit by size
-      .setMinZoom(4)
-      .setMinPixelSizeBelowZoom(10, 32); // `sql_filter: ST_Length(...)` used in OpenMapTiles translates to 32px
+    // Exclude shipways (e.g., ferry routes) that lie in the sea by not emitting them at all
+    return;
   }
 
   @Override

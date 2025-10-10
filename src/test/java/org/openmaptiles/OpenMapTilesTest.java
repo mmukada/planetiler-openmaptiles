@@ -142,11 +142,13 @@ class OpenMapTilesTest {
 
   @Test
   void testBoundary() {
-    assertFeatureNear(mbtiles, "boundary", Map.of(
-      "admin_level", 2L,
-      "maritime", 1L,
-      "disputed", 0L
-    ), 7.41884, 43.72396, 4, 14);
+    // Ensure maritime boundaries are excluded entirely
+    assertNumFeatures("boundary", Map.of(
+      "maritime", 1L
+    ), 4, 0, LineString.class);
+    assertNumFeatures("boundary", Map.of(
+      "maritime", 1L
+    ), 14, 0, LineString.class);
   }
 
   @Test

@@ -30,23 +30,8 @@ class MountainPeakTest extends AbstractLayerTest {
       "ele", "100",
       "wikidata", "Q123"
     )));
-    assertFeatures(14, List.of(Map.of(
-      "class", "peak",
-      "ele", 100,
-      "ele_ft", 328,
-      "customary_ft", "<null>",
-
-      "_layer", "mountain_peak",
-      "_type", "point",
-      "_minzoom", 7,
-      "_maxzoom", 14,
-      "_buffer", 100d
-    )), peak);
-    assertFeatures(14, List.of(Map.of(
-      "name:latin", "test",
-      "name", "test",
-      "name:es", "es wd name"
-    )), peak);
+    // Mountain peak features are excluded entirely
+    assertFeatures(14, List.of(), peak);
   }
 
   @Test
@@ -55,20 +40,14 @@ class MountainPeakTest extends AbstractLayerTest {
       "natural", "peak",
       "ele", "100"
     )));
-    assertFeatures(14, List.of(Map.of(
-      "_labelgrid_limit", 0
-    )), peak);
-    assertFeatures(13, List.of(Map.of(
-      "_labelgrid_limit", 5,
-      "_labelgrid_size", 100d
-    )), peak);
+    // Mountain peak features are excluded entirely
+    assertFeatures(14, List.of(), peak);
+    assertFeatures(13, List.of(), peak);
   }
 
   @Test
   void testVolcano() {
-    assertFeatures(14, List.of(Map.of(
-      "class", "volcano"
-    )), process(pointFeature(Map.of(
+    assertFeatures(14, List.of(), process(pointFeature(Map.of(
       "natural", "volcano",
       "ele", "100"
     ))));
@@ -76,11 +55,7 @@ class MountainPeakTest extends AbstractLayerTest {
 
   @Test
   void testElevationFeet() {
-    assertFeatures(14, List.of(Map.of(
-      "class", "volcano",
-      "ele", 30,
-      "ele_ft", 100
-    )), process(pointFeature(Map.of(
+    assertFeatures(14, List.of(), process(pointFeature(Map.of(
       "natural", "volcano",
       "ele", "100'"
     ))));
@@ -88,11 +63,7 @@ class MountainPeakTest extends AbstractLayerTest {
 
   @Test
   void testElevationFeetInches() {
-    assertFeatures(14, List.of(Map.of(
-      "class", "volcano",
-      "ele", 31,
-      "ele_ft", 101
-    )), process(pointFeature(Map.of(
+    assertFeatures(14, List.of(), process(pointFeature(Map.of(
       "natural", "volcano",
       "ele", "100' 11\""
     ))));
@@ -100,9 +71,7 @@ class MountainPeakTest extends AbstractLayerTest {
 
   @Test
   void testSaddle() {
-    assertFeatures(14, List.of(Map.of(
-      "class", "saddle"
-    )), process(pointFeature(Map.of(
+    assertFeatures(14, List.of(), process(pointFeature(Map.of(
       "natural", "saddle",
       "ele", "100"
     ))));
@@ -135,16 +104,7 @@ class MountainPeakTest extends AbstractLayerTest {
 
   @Test
   void testMountainLinestring() {
-    assertFeatures(14, List.of(Map.of(
-      "class", "ridge",
-      "name", "Ridge",
-
-      "_layer", "mountain_peak",
-      "_type", "line",
-      "_minzoom", 13,
-      "_maxzoom", 14,
-      "_buffer", 100d
-    )), process(lineFeature(Map.of(
+    assertFeatures(14, List.of(), process(lineFeature(Map.of(
       "natural", "ridge",
       "name", "Ridge"
     ))));
@@ -160,13 +120,8 @@ class MountainPeakTest extends AbstractLayerTest {
       0
     ));
 
-    // inside US - customary_ft=1
-    assertFeatures(14, List.of(Map.of(
-      "class", "volcano",
-      "customary_ft", 1,
-      "ele", 100,
-      "ele_ft", 328
-    )), process(SimpleFeature.create(
+    // inside US - but mountain peak features are excluded
+    assertFeatures(14, List.of(), process(SimpleFeature.create(
       newPoint(0, 0),
       new HashMap<>(Map.<String, Object>of(
         "natural", "volcano",
@@ -177,13 +132,8 @@ class MountainPeakTest extends AbstractLayerTest {
       0
     )));
 
-    // outside US - customary_ft omitted
-    assertFeatures(14, List.of(Map.of(
-      "class", "volcano",
-      "customary_ft", "<null>",
-      "ele", 100,
-      "ele_ft", 328
-    )), process(SimpleFeature.create(
+    // outside US - also excluded
+    assertFeatures(14, List.of(), process(SimpleFeature.create(
       newPoint(1, 1),
       new HashMap<>(Map.<String, Object>of(
         "natural", "volcano",
@@ -195,32 +145,13 @@ class MountainPeakTest extends AbstractLayerTest {
     )));
   }
 
-  private int getSortKey(Map<String, Object> tags) {
-    return process(pointFeature(Map.of(
-      "natural", "peak",
-      "ele", "100"
-    ))).iterator().next().getSortKey();
-  }
-
   @Test
   void testSortKey() {
-    assertAscending(
-      getSortKey(Map.of(
-        "natural", "peak",
-        "name", "name",
-        "wikipedia", "wikilink",
-        "ele", "100"
-      )),
-      getSortKey(Map.of(
-        "natural", "peak",
-        "name", "name",
-        "ele", "100"
-      )),
-      getSortKey(Map.of(
-        "natural", "peak",
-        "ele", "100"
-      ))
-    );
+    // No mountain peak features are emitted, so there are no sort keys to compare
+    assertFeatures(14, List.of(), process(pointFeature(Map.of(
+      "natural", "peak",
+      "ele", "100"
+    ))));
   }
 
   @Test
